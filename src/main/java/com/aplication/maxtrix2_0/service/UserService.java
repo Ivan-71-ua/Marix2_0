@@ -24,4 +24,8 @@ public class UserService {
         User user = userRepository.findByLogin(login);
         return user != null && user.getPassword().equals(password);
     }
+
+    public User findUserByLogin(String login) {
+        return userRepository.findByLogin(login);
+    }
 }
