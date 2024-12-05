@@ -14,25 +14,25 @@ public class TestController {
     @Autowired
     private TestService testService;
 
-    // Запит для створення тесту
     @PostMapping("/create")
     public ResponseEntity<?> createTest(@RequestBody Map<String, Object> requestData) {
         boolean success = testService.createTest(requestData);
         if (success) {
-            return ResponseEntity.ok(true); // Успішно створено
+            return ResponseEntity.ok("Test created successfully");
         } else {
-            return ResponseEntity.status(400).body(false); // Створення не вдалося
+            return ResponseEntity.status(400).body("Failed to create test. Test name may already exist.");
         }
     }
 
-    // Запит для отримання тесту
     @PostMapping("/get")
     public ResponseEntity<?> getTest(@RequestBody Map<String, String> requestData) {
-        Map<String, Object> testDetails = testService.getTest(requestData);
+        String testName = requestData.get("testName");
+        String category = requestData.get("category");
+        Map<String, Object> testDetails = testService.getTest(testName, category);
         if (testDetails != null) {
-            return ResponseEntity.ok(testDetails); // Повернення даних тесту
+            return ResponseEntity.ok(testDetails);
         } else {
-            return ResponseEntity.status(404).body("Test not found"); // Тест не знайдено
+            return ResponseEntity.status(404).body("Test not found");
         }
     }
 }

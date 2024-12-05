@@ -9,5 +9,4 @@ public class Maxtrix20Application {
     public static void main(String[] args) {
         SpringApplication.run(Maxtrix20Application.class, args);
     }
-
 }

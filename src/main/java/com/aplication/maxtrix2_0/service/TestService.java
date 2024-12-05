@@ -12,25 +12,18 @@ public class TestService {
     @Autowired
     private TestRepository testRepository;
 
-    // Створення тесту
     public boolean createTest(Map<String, Object> requestData) {
         String category = (String) requestData.get("category");
         String testName = (String) requestData.get("testName");
 
-        // Перевірка на унікальність назви тесту
-        if (testRepository.existsByCategoryAndTestName(category, testName)) {
-            return false; // Назва тесту вже існує
+        if (testRepository.existsByTestName(testName)) {
+            return false;
         }
 
-        // Збереження тесту
         return testRepository.saveTest(requestData);
     }
 
-    // Отримання тесту
-    public Map<String, Object> getTest(Map<String, String> requestData) {
-        String category = requestData.get("category");
-        String testName = requestData.get("testName");
-
-        return testRepository.findTestByCategoryAndTestName(category, testName);
+    public Map<String, Object> getTest(String testName, String category) {
+        return testRepository.findTestByCategoryAndTestName(testName);
     }
 }
