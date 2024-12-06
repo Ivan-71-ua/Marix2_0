@@ -27,4 +27,14 @@ public class UserService {
 
         return userRepository.validateUser(login, password);
     }
+
+    // Перевіряє, чи користувач зареєстрований
+    public boolean isUserRegistered(String login) {
+        return userRepository.existsByLogin(login);
+    }
+
+    // Отримує повну інформацію про користувача
+    public Map<String, Object> getUserInfo(String login) {
+        return userRepository.getUserInfoByLogin(login);
+    }
 }

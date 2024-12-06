@@ -33,4 +33,22 @@ public class UserController {
             return ResponseEntity.status(401).body("Invalid login or password");
         }
     }
+
+    @PostMapping("/getUserInfo")
+    public ResponseEntity<?> getUserInfo(@RequestBody Map<String, String> requestData) {
+        String login = requestData.get("login");
+
+        // Перевірка, чи користувач зареєстрований
+        if (!userService.isUserRegistered(login)) {
+            return ResponseEntity.status(404).body("User not found.");
+        }
+
+        // Отримання інформації про користувача
+        Map<String, Object> userInfo = userService.getUserInfo(login);
+        if (userInfo != null) {
+            return ResponseEntity.ok(userInfo);
+        } else {
+            return ResponseEntity.status(500).body("An unexpected error occurred.");
+        }
+    }
 }

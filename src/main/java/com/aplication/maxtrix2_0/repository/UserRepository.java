@@ -17,6 +17,16 @@ public class UserRepository {
         Integer count = jdbcTemplate.queryForObject(query, Integer.class, login);
         return count != null && count > 0;
     }
+    // Отримує повну інформацію про користувача
+    public Map<String, Object> getUserInfoByLogin(String login) {
+        String query = "SELECT full_name, is_admin, password FROM users WHERE login = ?";
+        try {
+            return jdbcTemplate.queryForMap(query, login);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     // Перевіряє, чи є користувач адміністратором
     public boolean isAdmin(String login) {
