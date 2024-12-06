@@ -6,6 +6,7 @@ import com.aplication.maxtrix2_0.repository.TestRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -56,5 +57,10 @@ public class TestService {
     // Отримує тест із репозиторію
     public Map<String, Object> getTest(String testName, String category) {
         return testRepository.findTestByCategoryAndTestName(testName);
+    }
+
+    // Отримує всі тести автора
+    public List<String> getTestsByAuthor(String authorLogin) {
+        return testRepository.findTestsByAuthor(authorLogin);
     }
 }

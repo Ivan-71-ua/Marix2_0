@@ -1,10 +1,12 @@
 package com.aplication.maxtrix2_0.controller;
 
 import com.aplication.maxtrix2_0.service.TestService;
+import com.aplication.maxtrix2_0.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -13,6 +15,9 @@ public class TestController {
 
     @Autowired
     private TestService testService;
+
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/create")
     public ResponseEntity<?> createTest(@RequestBody Map<String, Object> requestData) {
@@ -56,5 +61,22 @@ public class TestController {
         }
     }
 
+    @PostMapping("/getByAuthor")
+    public ResponseEntity<?> getTestsByAuthor(@RequestBody Map<String, String> requestData) {
+        String authorLogin = requestData.get("author");
+
+        // Перевірка, чи автор існує
+        if (!userService.isUserRegistered(authorLogin)) {
+            return ResponseEntity.status(404).body("Author not found.");
+        }
+
+        // Отримання списку тестів
+        List<String> testNames = testService.getTestsByAuthor(authorLogin);
+        if (testNames != null && !testNames.isEmpty()) {
+            return ResponseEntity.ok(testNames);
+        } else {
+            return ResponseEntity.status(404).body("No tests found for this author.");
+        }
+    }
 
 }

@@ -7,6 +7,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -58,6 +59,12 @@ public class    TestRepository {
             e.printStackTrace();
             return null;
         }
+    }
+
+    // Знаходить усі тести за логіном автора
+    public List<String> findTestsByAuthor(String authorLogin) {
+        String query = "SELECT test_name FROM tests WHERE author = ?";
+        return jdbcTemplate.queryForList(query, String.class, authorLogin);
     }
 
 }
