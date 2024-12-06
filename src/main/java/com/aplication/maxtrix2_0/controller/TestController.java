@@ -16,23 +16,43 @@ public class TestController {
 
     @PostMapping("/create")
     public ResponseEntity<?> createTest(@RequestBody Map<String, Object> requestData) {
-        boolean success = testService.createTest(requestData);
-        if (success) {
-            return ResponseEntity.ok("Test created successfully");
-        } else {
-            return ResponseEntity.status(400).body("Failed to create test. Test name may already exist.");
+        try {
+            boolean success = testService.createTest(requestData);
+            if (success) {
+                return ResponseEntity.ok("Test created successfully");
+            } else {
+                return ResponseEntity.status(400).body("Failed to create test. Test name may already exist.");
+            }
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(400).body(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("An unexpected error occurred.");
         }
     }
 
     @PostMapping("/get")
     public ResponseEntity<?> getTest(@RequestBody Map<String, String> requestData) {
-        String testName = requestData.get("testName");
-        String category = requestData.get("category");
-        Map<String, Object> testDetails = testService.getTest(testName, category);
-        if (testDetails != null) {
-            return ResponseEntity.ok(testDetails);
-        } else {
-            return ResponseEntity.status(404).body("Test not found");
+        try {
+            String testName = requestData.get("testName");
+            String category = requestData.get("category");
+
+            // Перевірка валідності категорії
+            if (!testService.isValidCategory(category)) {
+                return ResponseEntity.status(400).body("Invalid category. Please use a valid category.");
+            }
+
+            // Отримуємо тест
+            Map<String, Object> testDetails = testService.getTest(testName, category);
+
+            if (testDetails != null) {
+                return ResponseEntity.ok(testDetails);
+            } else {
+                return ResponseEntity.status(404).body("Test not found.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("An unexpected error occurred.");
         }
     }
 }

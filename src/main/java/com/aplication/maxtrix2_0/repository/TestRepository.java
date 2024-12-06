@@ -3,6 +3,7 @@ package com.aplication.maxtrix2_0.repository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -50,9 +51,13 @@ public class    TestRepository {
         String query = "SELECT * FROM tests WHERE test_name = ?";
         try {
             return jdbcTemplate.queryForMap(query, testName);
+        } catch (EmptyResultDataAccessException e) {
+            // Тест не знайдено
+            return null;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
+
 }

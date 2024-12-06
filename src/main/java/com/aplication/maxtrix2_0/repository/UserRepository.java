@@ -18,6 +18,13 @@ public class UserRepository {
         return count != null && count > 0;
     }
 
+    // Перевіряє, чи є користувач адміністратором
+    public boolean isAdmin(String login) {
+        String query = "SELECT is_admin FROM users WHERE login = ?";
+        Boolean isAdmin = jdbcTemplate.queryForObject(query, Boolean.class, login);
+        return isAdmin != null && isAdmin;
+    }
+
     public boolean saveUser(Map<String, Object> requestData) {
         String login = (String) requestData.get("login");
         String fullName = (String) requestData.get("fullName");
