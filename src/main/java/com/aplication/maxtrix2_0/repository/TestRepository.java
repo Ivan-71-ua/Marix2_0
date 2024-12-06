@@ -67,4 +67,10 @@ public class    TestRepository {
         return jdbcTemplate.queryForList(query, String.class, authorLogin);
     }
 
+    // Знаходить усі тести за категорією
+    public List<String> findTestsByCategory(String category) {
+        String query = "SELECT test_name FROM tests WHERE category = ?";
+        return jdbcTemplate.queryForList(query, String.class, category);
+    }
+
 }

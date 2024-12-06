@@ -63,4 +63,9 @@ public class TestService {
     public List<String> getTestsByAuthor(String authorLogin) {
         return testRepository.findTestsByAuthor(authorLogin);
     }
+
+    // Отримує всі тести за категорією
+    public List<String> getTestsByCategory(String category) {
+        return testRepository.findTestsByCategory(category);
+    }
 }

@@ -15,4 +15,9 @@ public class CategoryService {
     public List<String> getAllCategories() {
         return categoryRepository.findAllCategories();
     }
+
+    // Перевіряє, чи категорія є валідною
+    public boolean isCategoryValid(String category) {
+        return categoryRepository.existsByCategoryName(category);
+    }
 }

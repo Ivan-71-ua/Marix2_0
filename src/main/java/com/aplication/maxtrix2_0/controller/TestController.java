@@ -1,5 +1,6 @@
 package com.aplication.maxtrix2_0.controller;
 
+import com.aplication.maxtrix2_0.service.CategoryService;
 import com.aplication.maxtrix2_0.service.TestService;
 import com.aplication.maxtrix2_0.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,27 @@ public class TestController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @PostMapping("/getByCategory")
+    public ResponseEntity<?> getTestsByCategory(@RequestBody Map<String, String> requestData) {
+        String category = requestData.get("category");
+
+        // Перевірка, чи категорія існує
+        if (!categoryService.isCategoryValid(category)) {
+            return ResponseEntity.status(404).body("Category not found.");
+        }
+
+        // Отримання списку тестів за категорією
+        List<String> testNames = testService.getTestsByCategory(category);
+        if (testNames != null && !testNames.isEmpty()) {
+            return ResponseEntity.ok(testNames);
+        } else {
+            return ResponseEntity.status(404).body("No tests found for this category.");
+        }
+    }
 
     @PostMapping("/create")
     public ResponseEntity<?> createTest(@RequestBody Map<String, Object> requestData) {
